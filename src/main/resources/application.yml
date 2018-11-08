@@ -1,0 +1,10 @@
+pic:
+ webPath: /images/
+ savePath: E:/uploadVidoe/
+
+#spring boot 默认文件上传大小
+spring:
+  servlet:
+    multipart:
+      max-request-size: 100
+      max-file-size: 10

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{/jquery-3.3.1.js}">
+    </script>
+</head>
+
+<body>
+<span><input style="width: 75%; height: 100%;display: block" type="file" name="myfile" onchange="uploadVidoe(this)"/>
+</span>
+</body>
+
+<script>
+
+    function uploadVidoe(vidoe) {
+        var fileObj = vidoe.files[0]; // 获取文件对象
+
+        if (fileObj != undefined) {
+
+            if (fileObj.name) {
+                console.log(fileObj.name)
+            } else {
+                alert("请选择文件");
+            }
+
+            var size = fileObj.size;
+            var type = fileObj.type;
+
+            //校验格式
+            if (type.indexOf('mp4') == -1) {
+                alert("请上传MP4格式")
+                return false;
+            }
+            //校验大小
+            if (size / 1024 / 2014 > 10) {
+                alert("请上传" + size + "之内的视频")
+                return false;
+            }
+
+            var form = new FormData(); // FormData 对象
+            form.append("file", fileObj);
+            $.ajax({
+                url: "uploadVidoe",
+                contentType: false,//false 传输对象
+                processData: false,
+                type: "POST",
+                data: form,
+                success: function (ret) {
+                    if(ret.resCode != undefined){
+
+                        if(ret.resCode == '1'){
+                            alert("上传成功")
+                        }
+                        else if(ret.resCode == '0'){
+                            alert("上传失败")
+                        }
+                    }
+                }
+            })
+
+           /* var url = "uploadVidoe"; // 接收上传文件的后台地址
+            var form = new FormData(); // FormData 对象
+            form.append("file", fileObj); // 文件对象
+            xhr = new XMLHttpRequest(); // XMLHttpRequest 对象
+            xhr.open("post", url, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+            xhr.onload = uploadComplete; //请求完成
+            xhr.onerror = uploadFailed; //请求失败
+            xhr.send(form); //开始上传，发送form数据*/
+        }
+    }
+
+</script>
+
+</html>
